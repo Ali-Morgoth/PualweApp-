@@ -9,7 +9,7 @@ import { UserGroupIcon, UsersIcon } from "@heroicons/react/24/solid";
 export default function Directiva() {
   const [activeTab, setActiveTab] = useState("socios"); // 'socios' o 'directiva'
   const [socios, setSocios] = useState([]);
-  const [directiva, setDirectiva] = useState([]);
+  const [directivas, setDirectivas] = useState([]); // Cambiado de 'directiva' a 'directivas' para mejor claridad
   const [filtroAño, setFiltroAño] = useState("Todos");
 
   useEffect(() => {
@@ -19,27 +19,30 @@ export default function Directiva() {
       setSocios(users);
     };
 
-    const fetchDirectiva = async () => {
+    const fetchDirectivas = async () => { // Cambiado el nombre de la función para mayor claridad
       const snapshot = await getDocs(collection(db, "directiva"));
-      const miembros = snapshot.docs.map((doc) => ({
+      const listaDirectivas = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setDirectiva(miembros);
+      // Ordena las directivas por fecha de inicio (más reciente primero)
+      listaDirectivas.sort((a, b) => new Date(b.fechaInicio) - new Date(a.fechaInicio));
+      setDirectivas(listaDirectivas);
     };
 
     fetchSocios();
-    fetchDirectiva();
+    fetchDirectivas();
   }, []);
 
+  // Recopila años únicos de las fechas de inicio
   const añosUnicos = [
-    ...new Set(directiva.map((miembro) => miembro.año).filter(Boolean)),
-  ];
+    ...new Set(directivas.map((dir) => new Date(dir.fechaInicio).getFullYear()).filter(Boolean)),
+  ].sort((a, b) => b - a); // Ordenar años de forma descendente
 
-  const directivaFiltrada =
+  const directivasFiltradas =
     filtroAño === "Todos"
-      ? directiva
-      : directiva.filter((m) => m.año === filtroAño);
+      ? directivas
+      : directivas.filter((dir) => new Date(dir.fechaInicio).getFullYear().toString() === filtroAño);
 
   return (
     <div className="min-h-screen bg-white p-6">
@@ -123,43 +126,22 @@ export default function Directiva() {
       {activeTab === "directiva" && (
         <div className="bg-gray-100 p-6 rounded-lg shadow-2xl border border-gray-400 max-w-4xl mx-auto">
           <h2 className="text-black font-semibold mb-4">
-            Miembros de la directiva:
+            Directivas registradas:
           </h2>
-          {directivaFiltrada.length === 0 ? (
-            <p className="text-gray-500">No hay registros para este año.</p>
-          ) : (
-            <ul className="space-y-4">
-              {directivaFiltrada.map((m, i) => (
-                <li
-                  key={m.id}
-                  className="flex justify-between items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200 border border-gray-300"
-                >
-                  <div className="text-gray-800">
-                    <span className="font-semibold text-blue-600 mr-2">
-                      #{i + 1}
-                    </span>
-                    {m.nombre} {m.apellidoPaterno} {m.apellidoMaterno} -{" "}
-                    <span className="italic">{m.cargo}</span>
-                  </div>
-                  <div className="text-sm text-gray-500">{m.año}</div>
-                </li>
-              ))}
-            </ul>
-          )}
 
           {/* Filtro por año */}
           {añosUnicos.length > 0 && (
-            <div className="mt-6 flex items-center gap-4">
-              <label htmlFor="filtroAño" className="text-sm font-medium">
-                Filtrar por año:
+            <div className="mb-6 flex items-center gap-4">
+              <label htmlFor="filtroAño" className="text-sm font-medium text-black">
+                Filtrar por año de inicio:
               </label>
               <select
                 id="filtroAño"
                 value={filtroAño}
                 onChange={(e) => setFiltroAño(e.target.value)}
-                className="px-3 py-2 border border-gray-400 rounded"
+                className="px-3 py-2 border border-gray-400 rounded text-black"
               >
-                <option value="Todos">Todos</option>
+                <option value="Todos">Todas</option>
                 {añosUnicos.map((año) => (
                   <option key={año} value={año}>
                     {año}
@@ -167,6 +149,38 @@ export default function Directiva() {
                 ))}
               </select>
             </div>
+          )}
+
+          {directivasFiltradas.length === 0 ? (
+            <p className="text-gray-500">No hay directivas registradas para este año.</p>
+          ) : (
+            <ul className="space-y-4">
+              {directivasFiltradas.map((dir, index) => (
+                <li
+                  key={dir.id}
+                  className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200 border border-gray-300"
+                >
+                  <div className="text-gray-800 space-y-2">
+                    <div className="text-blue-600 font-bold">#{index + 1}</div>
+                    <div>
+                      <strong>Presidente:</strong> {dir.presidente?.nombre || "N/A"} ({dir.presidente?.rut || "N/A"})
+                    </div>
+                    <div>
+                      <strong>Vicepresidente:</strong> {dir.vicepresidente?.nombre || "N/A"} ({dir.vicepresidente?.rut || "N/A"})
+                    </div>
+                    <div>
+                      <strong>Secretario(a):</strong> {dir.secretario?.nombre || "N/A"} ({dir.secretario?.rut || "N/A"})
+                    </div>
+                    <div>
+                      <strong>Consejero(a) 1:</strong> {dir.consejero1?.nombre || "N/A"} ({dir.consejero1?.rut || "N/A"})
+                    </div>
+                    <div>
+                      <strong>Período:</strong> {dir.fechaInicio || "N/A"} — {dir.fechaFin || "N/A"}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       )}

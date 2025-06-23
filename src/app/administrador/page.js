@@ -60,6 +60,8 @@ export default function AdministradorPage() {
       if (adminSnap.exists()) {
         setAuthorized(true);
         await fetchSocios();
+        await fetchSocios();
+        await fetchDirectivas(); // <-- agregar aquí
       }
       setLoading(false);
     });
@@ -70,6 +72,12 @@ export default function AdministradorPage() {
     const snapshot = await getDocs(collection(db, "authorizedUsers"));
     const users = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     setSocios(users);
+  };
+
+  const fetchDirectivas = async () => {
+    const snapshot = await getDocs(collection(db, "directiva"));
+    const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setDirectivas(list);
   };
 
   const handleAddAuthorizedUser = async (e) => {
@@ -155,27 +163,82 @@ export default function AdministradorPage() {
     formRef.current?.scrollIntoView({ behavior: "smooth" }); // <--- scroll suave al formulario
   };
 
+  const [directivaForm, setDirectivaForm] = useState({
+    presidente: { rut: "", nombre: "" },
+    vicepresidente: { rut: "", nombre: "" },
+    secretario: { rut: "", nombre: "" },
+    consejero1: { rut: "", nombre: "" },
+    fechaInicio: "",
+    fechaFin: "",
+  });
+  const [directivas, setDirectivas] = useState([]);
+  const [editingDirectivaId, setEditingDirectivaId] = useState(null);
+
   const handleAddDirectiva = async (e) => {
     e.preventDefault();
+    const {
+      presidente,
+      vicepresidente,
+      secretario,
+      consejero1,
+      fechaInicio,
+      fechaFin,
+    } = directivaForm;
+
     if (
-      !directiva.nombre ||
-      !directiva.apellidoPaterno ||
-      !directiva.apellidoMaterno ||
-      !directiva.cargo ||
-      !directiva.año
+      !presidente.rut ||
+      !presidente.nombre ||
+      !vicepresidente.rut ||
+      !vicepresidente.nombre ||
+      !secretario.rut ||
+      !secretario.nombre ||
+      !consejero1.rut ||
+      !consejero1.nombre ||
+      !fechaInicio ||
+      !fechaFin
     ) {
-      return toast.error("Completa todos los campos de directiva.");
+      return toast.error("Completa todos los campos de la directiva.");
     }
 
-    await setDoc(doc(collection(db, "directiva")), directiva);
-    setDirectiva({
-      nombre: "",
-      apellidoPaterno: "",
-      apellidoMaterno: "",
-      cargo: "",
-      año: "",
+    try {
+      if (editingDirectivaId) {
+        await updateDoc(
+          doc(db, "directiva", editingDirectivaId),
+          directivaForm
+        );
+        toast.success("Directiva actualizada correctamente");
+        setEditingDirectivaId(null);
+      } else {
+        await setDoc(doc(collection(db, "directiva")), directivaForm);
+        toast.success("Directiva guardada exitosamente");
+      }
+
+      setDirectivaForm({
+        presidente: { rut: "", nombre: "" },
+        vicepresidente: { rut: "", nombre: "" },
+        secretario: { rut: "", nombre: "" },
+        consejero1: { rut: "", nombre: "" },
+        fechaInicio: "",
+        fechaFin: "",
+      });
+
+      fetchDirectivas();
+    } catch (error) {
+      toast.error("Error al guardar la directiva.");
+    }
+  };
+
+  const handleEditDirectiva = (directiva) => {
+    setDirectivaForm({
+      presidente: directiva.presidente,
+      vicepresidente: directiva.vicepresidente,
+      secretario: directiva.secretario,
+      consejero1: directiva.consejero1,
+      fechaInicio: directiva.fechaInicio,
+      fechaFin: directiva.fechaFin,
     });
-    toast.success("Integrante de la directiva agregado");
+    setEditingDirectivaId(directiva.id);
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   if (loading) {
@@ -297,9 +360,7 @@ export default function AdministradorPage() {
                   type="email"
                   placeholder="Correo electrónico"
                   value={form.email || ""}
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="col-span-full px-3 py-2 w-full text-black"
                   required
                   disabled={!!editingEmail}
@@ -383,74 +444,237 @@ export default function AdministradorPage() {
 
           <div className="bg-gray-100 p-6 rounded-lg shadow-2xl border border-gray-300">
             <form onSubmit={handleAddDirectiva} className="space-y-4">
-              <h2 className=" text-black font-semibold mb-2">
-                Agregar integrante de la directiva
+              <h2 className="text-black font-semibold mb-2">
+                Agregar nueva directiva
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Presidente */}
                 <input
                   type="text"
-                  placeholder="Nombre"
-                  value={directiva.nombre || ""}
+                  placeholder="RUT Presidente"
+                  value={directivaForm.presidente.rut}
                   onChange={(e) =>
-                    setDirectiva({ ...directiva, nombre: e.target.value })
-                  }
-                  className="px-3 py-2 w-full"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Primer Apellido"
-                  value={directiva.apellidoPaterno || ""}
-                  onChange={(e) =>
-                    setDirectiva({
-                      ...directiva,
-                      apellidoPaterno: e.target.value,
+                    setDirectivaForm({
+                      ...directivaForm,
+                      presidente: {
+                        ...directivaForm.presidente,
+                        rut: e.target.value,
+                      },
                     })
                   }
-                  className="px-3 py-2 w-full"
+                  className="px-3 py-2 w-full text-black"
                   required
                 />
                 <input
                   type="text"
-                  placeholder="Segundo Apellido"
-                  value={directiva.apellidoMaterno || ""}
+                  placeholder="Nombre completo Presidente"
+                  value={directivaForm.presidente.nombre}
                   onChange={(e) =>
-                    setDirectiva({
-                      ...directiva,
-                      apellidoMaterno: e.target.value,
+                    setDirectivaForm({
+                      ...directivaForm,
+                      presidente: {
+                        ...directivaForm.presidente,
+                        nombre: e.target.value,
+                      },
                     })
                   }
-                  className="px-3 py-2 w-full"
+                  className="px-3 py-2 w-full text-black"
+                  required
+                />
+
+                {/* Vicepresidente */}
+                <input
+                  type="text"
+                  placeholder="RUT Vicepresidente"
+                  value={directivaForm.vicepresidente.rut}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      vicepresidente: {
+                        ...directivaForm.vicepresidente,
+                        rut: e.target.value,
+                      },
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black"
                   required
                 />
                 <input
                   type="text"
-                  placeholder="Cargo"
-                  value={directiva.cargo || ""}
+                  placeholder="Nombre completo Vicepresidente"
+                  value={directivaForm.vicepresidente.nombre}
                   onChange={(e) =>
-                    setDirectiva({ ...directiva, cargo: e.target.value })
+                    setDirectivaForm({
+                      ...directivaForm,
+                      vicepresidente: {
+                        ...directivaForm.vicepresidente,
+                        nombre: e.target.value,
+                      },
+                    })
                   }
-                  className="px-3 py-2 w-full"
+                  className="px-3 py-2 w-full text-black"
+                  required
+                />
+
+                {/* Secretario */}
+                <input
+                  type="text"
+                  placeholder="RUT Secretario(a)"
+                  value={directivaForm.secretario.rut}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      secretario: {
+                        ...directivaForm.secretario,
+                        rut: e.target.value,
+                      },
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black"
                   required
                 />
                 <input
                   type="text"
-                  placeholder="Año"
-                  value={directiva.año || ""}
+                  placeholder="Nombre completo Secretario(a)"
+                  value={directivaForm.secretario.nombre}
                   onChange={(e) =>
-                    setDirectiva({ ...directiva, año: e.target.value })
+                    setDirectivaForm({
+                      ...directivaForm,
+                      secretario: {
+                        ...directivaForm.secretario,
+                        nombre: e.target.value,
+                      },
+                    })
                   }
-                  className="px-3 py-2 w-full"
+                  className="px-3 py-2 w-full text-black"
+                  required
+                />
+
+                {/* Consejero */}
+                <input
+                  type="text"
+                  placeholder="RUT Consejero(a) 1"
+                  value={directivaForm.consejero1.rut}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      consejero1: {
+                        ...directivaForm.consejero1,
+                        rut: e.target.value,
+                      },
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Nombre completo Consejero(a) 1"
+                  value={directivaForm.consejero1.nombre}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      consejero1: {
+                        ...directivaForm.consejero1,
+                        nombre: e.target.value,
+                      },
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black"
+                  required
+                />
+
+                {/* Fechas */}
+                <input
+                  type="date"
+                  placeholder="Fecha inicio"
+                  value={directivaForm.fechaInicio}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      fechaInicio: e.target.value,
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black "
+                  required
+                />
+                <input
+                  type="date"
+                  placeholder="Fecha fin"
+                  value={directivaForm.fechaFin}
+                  onChange={(e) =>
+                    setDirectivaForm({
+                      ...directivaForm,
+                      fechaFin: e.target.value,
+                    })
+                  }
+                  className="px-3 py-2 w-full text-black"
                   required
                 />
               </div>
+
               <button
                 type="submit"
                 className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
               >
-                Agregar directiva
+                Guardar directiva
               </button>
             </form>
+          </div>
+          <div className="bg-gray-100 p-6 rounded-lg shadow-2xl border border-gray-300 mt-10">
+            <h2 className="text-black font-semibold mb-4">
+              Directivas registradas:
+            </h2>
+            {directivas.length === 0 ? (
+              <p className="text-gray-500">
+                No hay directivas registradas aún.
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {directivas.map((dir, index) => (
+                  <li
+                    key={dir.id}
+                    className="bg-white p-4 rounded shadow border border-gray-200"
+                  >
+                    <div className="text-gray-800 space-y-2">
+                      <div className="text-blue-600 font-bold">
+                        #{index + 1}
+                      </div>
+                      <div>
+                        <strong>Presidente:</strong>{" "}
+                        {dir.presidente?.nombre || "N/A"} (
+                        {dir.presidente?.rut || "N/A"})
+                      </div>
+                      <div>
+                        <strong>Vicepresidente:</strong>{" "}
+                        {dir.vicepresidente?.nombre || "N/A"} (
+                        {dir.vicepresidente?.rut || "N/A"})
+                      </div>
+                      <div>
+                        <strong>Secretario(a):</strong>{" "}
+                        {dir.secretario?.nombre || "N/A"} (
+                        {dir.secretario?.rut || "N/A"})
+                      </div>
+                      <div>
+                        <strong>Consejero(a) 1:</strong>{" "}
+                        {dir.consejero1?.nombre || "N/A"} (
+                        {dir.consejero1?.rut || "N/A"})
+                      </div>
+                      <div>
+                        <strong>Inicio:</strong> {dir.fechaInicio || "N/A"} —{" "}
+                        <strong>Fin:</strong> {dir.fechaFin || "N/A"}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleEditDirectiva(dir)}
+                      className="mt-2 text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      Editar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
