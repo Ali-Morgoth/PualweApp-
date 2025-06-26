@@ -341,7 +341,7 @@ export default function AdministradorPage() {
           <span>Volver</span>
         </button>
 
-        <h1 className="text-3xl text-black font-bold text-center mb-10">
+        <h1 className="text-3xl text-black dark:text-white font-bold text-center mb-10">
           Panel de Administrador
         </h1>
 
