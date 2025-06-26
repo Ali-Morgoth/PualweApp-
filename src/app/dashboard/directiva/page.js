@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { UserGroupIcon, UsersIcon } from "@heroicons/react/24/solid";
+import { BuildingOfficeIcon, UserGroupIcon } from "@heroicons/react/24/solid";
 
 export default function Directiva() {
   const [activeTab, setActiveTab] = useState("socios"); // 'socios' o 'directiva'
@@ -61,7 +61,7 @@ export default function Directiva() {
                 : "text-gray-700 hover:bg-gray-300"
             }`}
           >
-            <UserGroupIcon className="w-5 h-5" />
+            <BuildingOfficeIcon className="w-5 h-5" />
             Directiva
           </button>
           <button
@@ -72,7 +72,7 @@ export default function Directiva() {
                 : "text-gray-700 hover:bg-gray-300"
             }`}
           >
-            <UsersIcon className="w-5 h-5" />
+            <UserGroupIcon className="w-5 h-5" />
             Socios
           </button>
         </div>

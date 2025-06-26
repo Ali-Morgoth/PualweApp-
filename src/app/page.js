@@ -4,6 +4,8 @@ import LoginBox from "@/app/components/loginbox/LoginBox";
 import PublicLibrary from "@/app/components/publiclibrarybox/PublicLibrary";
 import KiyemtuainLoader from "./components/Loader/KiyemtuainLoader";
 import { useState } from "react";
+import InstallPrompt from "./components/installer/InstallPromtp";
+
 
 export default function Home() {
   const [isBlurred, setIsBlurred] = useState(false);
@@ -78,6 +80,10 @@ export default function Home() {
               <div className="custom-tooltip-arrow"></div>
             </div>
           </div>
+        </div>
+        <div>
+          {/* Tu contenido de navegación */}
+          <InstallPrompt />
         </div>
       </div>
     </div>

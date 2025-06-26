@@ -3,7 +3,7 @@
 
 import { useRouter } from "next/navigation";
 import {
-  UsersIcon,
+  UserGroupIcon,
   DocumentTextIcon,
   CurrencyDollarIcon,
   BookOpenIcon,
@@ -15,7 +15,7 @@ export default function Dashboard() {
   const router = useRouter();
 
   const buttons = [
-    { label: "Directiva/Socios", path: "/dashboard/directiva", icon: <UsersIcon className="w-6 h-6" /> },
+    { label: "Directiva/Socios", path: "/dashboard/directiva", icon: <UserGroupIcon className="w-6 h-6" /> },
     { label: "Documentos", path: "/dashboard/documentos", icon: <DocumentTextIcon className="w-6 h-6" /> },
     { label: "Tesorería", path: "/dashboard/tesoreria", icon: <CurrencyDollarIcon className="w-6 h-6" /> },
     { label: "Libros", path: "/dashboard/libros", icon: <BookOpenIcon className="w-6 h-6" /> },
