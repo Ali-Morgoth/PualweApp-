@@ -2,45 +2,32 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 export default function Biblioteca() {
   const router = useRouter();
 
   const categorias = [
     { nombre: "Historia", path: "historia", imagen: "/historia.webp" },
-    {
-      nombre: "Investigaciones",
-      path: "investigaciones",
-      imagen: "/investigaciones.webp",
-    },
-    {
-      nombre: "Cuentos y leyendas",
-      path: "cuentos-leyendas",
-      imagen: "/cuentos.webp",
-    },
+    { nombre: "Investigaciones", path: "investigaciones", imagen: "/investigaciones.webp" },
+    { nombre: "Cuentos y leyendas", path: "cuentos-leyendas", imagen: "/cuentos.webp" },
     { nombre: "Idioma", path: "idioma", imagen: "/idioma.webp" },
     { nombre: "Cosmovisión", path: "cosmovision", imagen: "/cosmovision.webp" },
     { nombre: "Arte y música", path: "arte", imagen: "/arte.webp" },
   ];
 
   return (
-    <div className="relative min-h-screen p-6">
-      {/* Imagen de fondo con menor zoom */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url('/biblioteca_publica.webp')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          filter: "blur(3.5px)"
-        
-          
-        }}
-      ></div>
-
-      {/* Capa oscura adicional si se desea más contraste */}
-      {/* <div className="absolute inset-0 bg-black opacity-10 z-10" /> */}
+    <div className="relative min-h-screen p-6 overflow-hidden">
+      {/* Imagen de fondo optimizada con blur */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/biblioteca_publica.webp"
+          alt="Fondo biblioteca"
+          fill
+          className="object-cover blur-[3.5px]"
+          priority
+        />
+      </div>
 
       {/* Flecha volver */}
       <button
