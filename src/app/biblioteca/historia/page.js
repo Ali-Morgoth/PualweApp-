@@ -27,7 +27,7 @@ export default function Historia() {
   }, []);
 
   return (
-    <div className="min-h-screen p-6 bg-[#f0f9f860]">
+    <div className="min-h-screen p-6 bg-[rgba(18,34,37,0.64)]">
       {/* Botón de volver */}
       <Link
         href="/biblioteca"

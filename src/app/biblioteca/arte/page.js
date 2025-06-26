@@ -27,13 +27,13 @@ export default function Arte() {
   }, []);
 
   return (
-    <div className="min-h-screen p-6 bg-[#f0f9f860]">
+    <div className="min-h-screen p-6 bg-[rgba(18,34,37,0.64)]">
       {/* Botón de volver */}
       <Link
         href="/biblioteca"
-        className="inline-flex items-center text-white hover:text-blue-800 transition mb-4"
+        className="inline-flex items-center text-white  hover:text-blue-800 transition mb-4"
       >
-        <ArrowLeftIcon className="h-5 w-5 mr-2" />
+        <ArrowLeftIcon className="h-5 w-5 mr-2 " />
         Volver atrás
       </Link>
 

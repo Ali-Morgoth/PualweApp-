@@ -33,7 +33,7 @@ export default function Biblioteca() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          opacity: 0.30,
+          
         }}
       ></div>
 
