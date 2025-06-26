@@ -33,6 +33,8 @@ export default function Biblioteca() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          filter: "blur(3.5px)"
+        
           
         }}
       ></div>
