@@ -18,7 +18,7 @@ export default function ClientWrapper({ children }) {
       <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center gap-6">
         {/* Imagen superior */}
         <Image
-          src="/Kiyemtuain_logo.png" // Cambia el path si tu logo está en otra carpeta
+          src="/logo_kiyemtuain_bg.png" // Cambia el path si tu logo está en otra carpeta
           alt="Logo Kiyemtuain"
           width={120}
           height={120}
