@@ -18,7 +18,7 @@ export const metadata = {
   description: "Comunidad Kiyemtuain - Compartiendo saberes ancestrales",
   icons: {
     icon: [
-      { url: "/logo_kiyemtuain.png" },
+      { url: "/logo_kiyemtuain_bg.png" },
       { url: "/favicon-32x32.ico" },
     ],
   },
