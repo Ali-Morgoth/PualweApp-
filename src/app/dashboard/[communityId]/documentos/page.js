@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db, storage } from "../../lib/firebase";
+import { db, storage } from "../../../lib/firebase";
 import {
   collection,
   addDoc,
@@ -12,6 +12,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  where
 } from "firebase/firestore";
 import {
   ref,
@@ -31,8 +32,8 @@ export default function Documentos() {
   const [documentos, setDocumentos] = useState([]);
   const [categoriaFiltro, setCategoriaFiltro] = useState("Todas");
   const [userRole, setUserRole] = useState(null);
+  const [communityId, setCommunityId] = useState(null);
 
-  // Nuevo estado para spinner y mensaje de éxito
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
@@ -49,37 +50,53 @@ export default function Documentos() {
     "Cartas de apoyo",
   ];
 
-  // Verificación del rol del usuario
+  // Verificación del rol y communityId
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
           const adminDoc = await getDoc(doc(db, "admin", user.email));
-          setUserRole(adminDoc.exists() ? "admin" : "user");
+          if (adminDoc.exists()) {
+            setUserRole("admin");
+            setCommunityId(adminDoc.data().communityId);
+          } else {
+            setUserRole("user");
+            const userDoc = await getDoc(doc(db, "users", user.email));
+            if (userDoc.exists()) {
+              setCommunityId(userDoc.data().communityId);
+            }
+          }
         } catch (error) {
           console.error("Error al verificar rol:", error);
           setUserRole("user");
         }
       } else {
         setUserRole(null);
+        setCommunityId(null);
       }
     });
     return () => unsubscribe();
   }, []);
 
-  // Cargar documentos
+  // Cargar documentos filtrados por communityId
   useEffect(() => {
-    const q = query(collection(db, "documentos"), orderBy("fecha", "desc"));
+    if (!communityId) return;
+
+    const q = query(
+  collection(db, "documentos"),
+  where("communityId", "==", communityId),
+  orderBy("fecha", "desc")
+);
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const datos = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const datos = snapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((doc) => doc.communityId === communityId);
       setDocumentos(datos);
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [communityId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -97,6 +114,7 @@ export default function Documentos() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.archivo) return alert("Debes subir un archivo PDF.");
+    if (!communityId) return alert("No se ha detectado la comunidad del usuario.");
 
     try {
       setIsUploading(true);
@@ -115,12 +133,12 @@ export default function Documentos() {
         archivoURL: downloadURL,
         archivoPath: storageRef.fullPath,
         fecha: Timestamp.now(),
+        communityId: communityId,
       });
 
       setUploadSuccess(true);
       setFormData({ nombre: "", categoria: "", archivo: null });
 
-      // Mantener el modal abierto unos segundos para mostrar el mensaje de éxito
       setTimeout(() => {
         setModalOpen(false);
         setUploadSuccess(false);
@@ -338,7 +356,6 @@ export default function Documentos() {
               />
             </div>
 
-            {/* Spinner y mensaje de éxito */}
             {isUploading && (
               <div className="flex items-center justify-center mb-4 gap-3 text-green-600 font-semibold">
                 <svg
@@ -398,5 +415,3 @@ export default function Documentos() {
     </div>
   );
 }
-
-

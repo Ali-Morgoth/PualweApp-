@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db, storage } from "../../lib/firebase";
+import { db, storage } from "../../../lib/firebase";
 import {
   collection,
   addDoc,
@@ -12,11 +12,14 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  where
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Tesoreria() {
+  const [communityId, setCommunityId] = useState(null);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
@@ -49,8 +52,15 @@ export default function Tesoreria() {
           const adminDoc = await getDoc(doc(db, "admin", user.email));
           if (adminDoc.exists()) {
             setUserRole("admin");
+            setCommunityId(adminDoc.data().communityId);
           } else {
             setUserRole("user");
+            const userDoc = await getDoc(
+              doc(db, "authorizedUsers", user.email)
+            );
+            if (userDoc.exists()) {
+              setCommunityId(userDoc.data().communityId);
+            }
           }
         } catch (error) {
           console.error("Error verificando rol de usuario:", error);
@@ -58,6 +68,7 @@ export default function Tesoreria() {
         }
       } else {
         setUserRole(null);
+        setCommunityId(null);
       }
     });
     return () => unsubscribe();
@@ -65,13 +76,21 @@ export default function Tesoreria() {
 
   // Escuchar documentos de tesorería ordenados por fecha
   useEffect(() => {
-    const q = query(collection(db, "tesoreria"), orderBy("fecha", "desc"));
+    if (!communityId) return;
+    const q = query(
+      collection(db, "tesoreria"),
+      where("communityId", "==", communityId),
+      orderBy("fecha", "desc")
+    );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const datos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const datos = snapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((doc) => doc.communityId === communityId);
       setDocumentos(datos);
     });
     return () => unsubscribe();
-  }, []);
+  }, [communityId]);
 
   // Manejar cambios en inputs y archivo
   const handleChange = (e) => {
@@ -108,6 +127,7 @@ export default function Tesoreria() {
         categoria: formData.categoria,
         archivoURL: downloadURL,
         fecha: Timestamp.now(),
+        communityId: communityId,
       });
 
       setIsUploading(false);

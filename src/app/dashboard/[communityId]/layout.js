@@ -3,7 +3,8 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { auth, db } from "../../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import {
   HomeIcon,
   UserCircleIcon,
@@ -19,8 +20,8 @@ export default function DashboardLayout({ children }) {
   const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [communityId, setCommunityId] = useState(null);
 
-  // Define las rutas en las que se debe mostrar el botón Panel
   const panelPaths = [
     "/directiva",
     "/documentos",
@@ -30,15 +31,22 @@ export default function DashboardLayout({ children }) {
     "/eventos",
   ];
 
-  // Muestra el botón si la ruta actual contiene alguna de las anteriores
   const showPanelButton = panelPaths.some((path) => pathname.includes(path));
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => {
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
       if (!u) {
         router.push("/");
       } else {
-        setUser(auth.currentUser); // ← Asegura obtener los datos completos como photoURL
+        setUser(u);
+
+        // Obtener communityId desde authorizedUsers
+        const userDocRef = doc(db, "authorizedUsers", u.email);
+        const userSnap = await getDoc(userDocRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          setCommunityId(data.communityId); // Guarda el communityId
+        }
       }
     });
     return () => unsubscribe();
@@ -51,7 +59,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-[#f0f9f8]">
-      {/* Barra superior fija */}
       <div className="w-full flex justify-between items-center p-4 bg-white shadow-md sticky top-0 z-50">
         <div className="flex gap-4 items-center">
           {/* Botón Home */}
@@ -63,10 +70,10 @@ export default function DashboardLayout({ children }) {
             <span className="font-medium">Inicio</span>
           </button>
 
-          {/* Botón Panel, solo si está en una ruta permitida */}
-          {showPanelButton && (
+          {/* Botón Panel dinámico */}
+          {showPanelButton && communityId && (
             <button
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push(`/dashboard/${communityId}`)}
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
             >
               <QueueListIcon className="w-6 h-6" />
@@ -130,7 +137,6 @@ export default function DashboardLayout({ children }) {
                   <Cog6ToothIcon className="w-5 h-5" />
                   Administrador
                 </button>
-
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
@@ -144,7 +150,6 @@ export default function DashboardLayout({ children }) {
         )}
       </div>
 
-      {/* Renderizado del contenido del panel */}
       <div className="p-6">{children}</div>
     </div>
   );

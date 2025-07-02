@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeftIcon,
@@ -7,9 +8,33 @@ import {
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase"; // Asegúrate de que tu archivo firebase.js exporta `db`
 
 export default function Ayuda() {
   const router = useRouter();
+  const [communityId, setCommunityId] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userRef = doc(db, "authorizedUsers", user.email);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            if (data.communityId) {
+              setCommunityId(data.communityId);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching communityId:", error);
+        }
+      }
+    });
+  }, []);
 
   const renderBullet = (text, color = "blue") => {
     const pClass = {
@@ -48,7 +73,11 @@ export default function Ayuda() {
   return (
     <div className="min-h-screen bg-[#f0f9f8] p-6 relative">
       <button
-        onClick={() => router.push("/dashboard")}
+        onClick={() => {
+          if (communityId) {
+            router.push(`/dashboard/${communityId}`);
+          }
+        }}
         className="absolute top-6 left-6 flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
         aria-label="Volver al dashboard"
       >

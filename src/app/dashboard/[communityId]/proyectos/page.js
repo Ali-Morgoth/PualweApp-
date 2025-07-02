@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db, storage } from "../../lib/firebase";
+import { db, storage } from "../../../lib/firebase";
 import {
   collection,
   addDoc,
@@ -12,11 +12,14 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  where
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Proyectos() {
+  const [communityId, setCommunityId] = useState(null);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
@@ -27,32 +30,47 @@ export default function Proyectos() {
   const [anioFiltro, setAnioFiltro] = useState("Todos");
   const [userRole, setUserRole] = useState(null);
 
-  // Cargar rol del usuario
+  // Cargar usuario por communityId
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const adminDocRef = doc(db, "admin", user.email);
-          const snap = await getDoc(adminDocRef);
-          if (snap.exists()) {
+          const adminDoc = await getDoc(doc(db, "admin", user.email));
+          if (adminDoc.exists()) {
             setUserRole("admin");
+            setCommunityId(adminDoc.data().communityId);
           } else {
-            setUserRole("user");
+            const userDoc = await getDoc(
+              doc(db, "authorizedUsers", user.email)
+            );
+            if (userDoc.exists()) {
+              setUserRole("user");
+              setCommunityId(userDoc.data().communityId);
+            }
           }
-        } catch {
-          setUserRole("user");
+        } catch (error) {
+          console.error("Error obteniendo comunidad:", error);
         }
       } else {
         setUserRole(null);
+        setCommunityId(null);
       }
     });
+
     return () => unsubscribe();
   }, []);
 
-  // Escuchar proyectos ordenados por fecha
+  // Escuchar proyectos ordenados por fecha, solo con communityId
   useEffect(() => {
-    const q = query(collection(db, "proyectos"), orderBy("fecha", "desc"));
+    if (!communityId) return;
+
+    const q = query(
+      collection(db, "proyectos"),
+      where("communityId", "==", communityId),
+      orderBy("fecha", "desc")
+    );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const datos = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -60,8 +78,9 @@ export default function Proyectos() {
       }));
       setProyectos(datos);
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [communityId]);
 
   // Extraer años únicos de los proyectos para filtro, tomando en cuenta 'anio' y 'fecha'
   const años = [
@@ -119,7 +138,10 @@ export default function Proyectos() {
       // Subir archivos uno a uno
       const urls = [];
       for (const archivo of formData.archivos) {
-        const storageRef = ref(storage, `proyectos/${Date.now()}_${archivo.name}`);
+        const storageRef = ref(
+          storage,
+          `proyectos/${Date.now()}_${archivo.name}`
+        );
         await uploadBytes(storageRef, archivo);
         const url = await getDownloadURL(storageRef);
         urls.push(url);
@@ -130,6 +152,7 @@ export default function Proyectos() {
         anio: Number(formData.anio),
         archivosURLs: urls,
         fecha: Timestamp.now(),
+        communityId: communityId,
       });
 
       setFormData({ nombre: "", anio: "", archivos: [] });
@@ -175,7 +198,9 @@ export default function Proyectos() {
 
       {/* Filtro por año */}
       <div className="mb-6 overflow-x-hidden">
-        <label className="block mb-2 text-gray-700 font-medium">Filtrar por año:</label>
+        <label className="block mb-2 text-gray-700 font-medium">
+          Filtrar por año:
+        </label>
         <select
           value={anioFiltro}
           onChange={(e) => setAnioFiltro(e.target.value)}

@@ -4,37 +4,37 @@ import { signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
-export default function LoginBox() {
+export default function LoginBox({ onLoginValidated }) {
   const router = useRouter();
 
   const handleLogin = async () => {
     try {
-      // Cerrar sesión previa para limpiar la sesión recordada
       await signOut(auth);
 
-      // Configura el proveedor de Google con forzado de selección de cuenta
       const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({
-        prompt: "select_account",
-      });
+      provider.setCustomParameters({ prompt: "select_account" });
 
-      // Inicia sesión con popup
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Verifica si está autorizado
       const docRef = doc(db, "authorizedUsers", user.email);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        router.push("/dashboard");
+        const { communityId } = docSnap.data();
+
+        // Mostrar loader de pantalla completa
+        if (onLoginValidated) onLoginValidated();
+
+        router.push(`/dashboard/${communityId}`);
       } else {
-        alert("No estás autorizado para ingresar.");
+        toast.error("No estás autorizado para ingresar.");
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      alert("Ocurrió un error al iniciar sesión.");
+      toast.error("Ocurrió un error al iniciar sesión.");
     }
   };
 
@@ -50,3 +50,4 @@ export default function LoginBox() {
     </div>
   );
 }
+

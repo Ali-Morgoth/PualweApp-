@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-
+import ClientWrapper from "../app/components/Loader/ClientWrapper"; // Asegúrate de importar bien
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +19,7 @@ export const metadata = {
   icons: {
     icon: [
       { url: "/Kiyemtuain_logo.png" },
-      { url: "/favicon.ico" },
+      { url: "/newfavicon.ico" },
     ],
   },
 };
@@ -35,9 +35,8 @@ export default function RootLayout({ children }) {
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <ClientWrapper>{children}</ClientWrapper>
         <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-     
       </body>
     </html>
   );

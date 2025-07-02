@@ -1,22 +1,43 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { auth } from "../lib/firebase";
+import { auth, db } from "../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 export default function Perfil() {
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [communityId, setCommunityId] = useState("");
+  const [communityName, setCommunityName] = useState("");
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => {
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
       if (!u) {
         router.push("/");
       } else {
         setUser(u);
+
+        // Obtener el communityId desde authorizedUsers
+        const userDoc = await getDoc(doc(db, "authorizedUsers", u.email));
+        if (userDoc.exists()) {
+          const { communityId } = userDoc.data();
+          setCommunityId(communityId); // <-- Guardar el ID
+        console.log("CommunityId de usuario:", communityId);
+  
+          // Obtener el nombre de la comunidad
+          if (communityId) {
+            const communityDoc = await getDoc(doc(db, "comunidades", communityId));
+            if (communityDoc.exists()) {
+              const { nombre } = communityDoc.data();
+              setCommunityName(nombre);
+            }
+          }
+        }
       }
     });
+
     return () => unsubscribe();
   }, [router]);
 
@@ -32,7 +53,7 @@ export default function Perfil() {
     <div className="min-h-screen bg-[#f0f9f8] flex flex-col items-center p-6 relative">
       {/* Botón volver atrás */}
       <button
-        onClick={() => router.push("/dashboard")}
+        onClick={() => router.push(`/dashboard/${communityId}`)}
         className="absolute top-6 left-6 flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
         aria-label="Volver al dashboard"
       >
@@ -58,6 +79,9 @@ export default function Perfil() {
         <div className="text-center">
           <h2 className="text-xl text-black font-semibold">{user.displayName || "Nombre no disponible"}</h2>
           <p className="text-gray-600">{cargo}</p>
+          {communityName && (
+            <h2 className="text-lg font-medium inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 text-white mt-1">{communityName}</h2>
+          )}
         </div>
 
         <div className="w-full">
@@ -78,3 +102,4 @@ export default function Perfil() {
     </div>
   );
 }
+

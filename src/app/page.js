@@ -9,6 +9,7 @@ import InstallPrompt from "./components/installer/InstallPromtp";
 
 export default function Home() {
   const [isBlurred, setIsBlurred] = useState(false);
+  const [showLoader, setShowLoader] = useState(false); // ← nuevo estado
 
   return (
     <div className="relative min-h-screen flex flex-col md:flex-row overflow-hidden">
@@ -25,10 +26,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Capa de opacidad encima de la imagen */}
       <div className="absolute inset-0 bg-black opacity-20 z-0" />
 
-      {/* Título animado */}
       <div className="animated-title-container z-10 relative">
         <span className="animated-title-text">Pualwe</span>
         <ul className="animated-words">
@@ -38,7 +37,6 @@ export default function Home() {
         </ul>
       </div>
 
-      {/* Contenido principal */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full p-8 gap-8 mt-32">
         <div className="flex flex-col md:flex-row items-center justify-center gap-y-8 md:gap-y-0 md:gap-x-8">
           <div
@@ -62,13 +60,13 @@ export default function Home() {
             <div className="cool-card">
               <span className="circleLight"></span>
               <div className="card-text">
-                <LoginBox />
+                <LoginBox onLoginValidated={() => setShowLoader(true)} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Loader y tooltip */}
+        {/* Loader de la comunidad (decorativo) */}
         <div className="mt-8 flex items-center justify-center gap-0 mr-10">
           <div className="-mr-2">
             <KiyemtuainLoader useImage />
@@ -90,6 +88,13 @@ export default function Home() {
           <InstallPrompt />
         </div>
       </div>
+
+      {/* Loader en pantalla completa tras validación */}
+      {showLoader && (
+        <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
+          <KiyemtuainLoader />
+        </div>
+      )}
     </div>
   );
 }
