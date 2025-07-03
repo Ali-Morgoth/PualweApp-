@@ -20,7 +20,6 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
-
 export default function AdminManager() {
   const [comunidad, setComunidad] = useState({
     nombre: "",
@@ -220,14 +219,16 @@ export default function AdminManager() {
         </button>
       </div>
 
-      <h2 className="text-2xl font-bold text-center text-gray-800 flex items-center justify-center gap-2">
-        <BuildingOffice2Icon className="h-7 w-7 text-blue-600" />
-        Administrador de Comunidades
-      </h2>
+      <div className="text-center mt-6">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Administrador de Comunidades
+        </h2>
+        <BuildingOffice2Icon className="h-7 w-7 text-blue-600 mx-auto mt-2" />
+      </div>
 
       {developerData && (
         <div className="text-center mb-6">
-          <p className="text-lg font-semibold text-white bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 inline-block">
+          <p className="text-lg font-semibold text-white bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 inline-block fade-in-up">
             {developerData.nombre} {developerData.primerApellido}{" "}
             {developerData.segundoApellido}
           </p>

@@ -5,6 +5,8 @@ import { auth, db } from "../../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import "./LoginBox.css";
+import { UserGroupIcon } from "@heroicons/react/24/outline";
 
 export default function LoginBox({ onLoginValidated }) {
   const router = useRouter();
@@ -25,9 +27,7 @@ export default function LoginBox({ onLoginValidated }) {
       if (docSnap.exists()) {
         const { communityId } = docSnap.data();
 
-        // Mostrar loader de pantalla completa
         if (onLoginValidated) onLoginValidated();
-
         router.push(`/dashboard/${communityId}`);
       } else {
         toast.error("No estás autorizado para ingresar.");
@@ -39,15 +39,15 @@ export default function LoginBox({ onLoginValidated }) {
   };
 
   return (
-    <div className="p-6 bg-[#87cec1] shadow-lg rounded-lg text-center w-70">
-      <h2 className="text-2xl font-serif mb-4 text-white">Acceso a socios</h2>
-      <button
-        onClick={handleLogin}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-      >
-        Iniciar sesión con Google
+    <div className="card-login">
+      <div className="circle-container justify-center">
+        <UserGroupIcon className="h-8 w-8 text-white animate-pulse" />
+      </div>
+      <h2 className="title">Acceso a socios</h2>
+      <h3 className="text-white text-sm subtitle">Si perteneces a una comunidad registrada de San Juan de la Costa </h3>
+      <button onClick={handleLogin} className="button">
+        <span className="text-button">Iniciar sesión con Google</span>
       </button>
     </div>
   );
 }
-

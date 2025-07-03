@@ -24,11 +24,13 @@ export default function Perfil() {
         if (userDoc.exists()) {
           const { communityId } = userDoc.data();
           setCommunityId(communityId); // <-- Guardar el ID
-        console.log("CommunityId de usuario:", communityId);
-  
+          console.log("CommunityId de usuario:", communityId);
+
           // Obtener el nombre de la comunidad
           if (communityId) {
-            const communityDoc = await getDoc(doc(db, "comunidades", communityId));
+            const communityDoc = await getDoc(
+              doc(db, "comunidades", communityId)
+            );
             if (communityDoc.exists()) {
               const { nombre } = communityDoc.data();
               setCommunityName(nombre);
@@ -41,10 +43,18 @@ export default function Perfil() {
     return () => unsubscribe();
   }, [router]);
 
-  if (!user) return <div className="flex justify-center items-center h-screen">Cargando...</div>;
+  if (!user)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Cargando...
+      </div>
+    );
 
   const cargo = "Miembro de la Comunidad";
-  const provider = user.providerData.length > 0 ? user.providerData[0].providerId : "Desconocido";
+  const provider =
+    user.providerData.length > 0
+      ? user.providerData[0].providerId
+      : "Desconocido";
   const lastLogin = user.metadata.lastSignInTime
     ? new Date(user.metadata.lastSignInTime).toLocaleString()
     : "Desconocida";
@@ -77,20 +87,32 @@ export default function Perfil() {
         )}
 
         <div className="text-center">
-          <h2 className="text-xl text-black font-semibold">{user.displayName || "Nombre no disponible"}</h2>
+          <h2 className="text-xl text-black font-semibold">
+            {user.displayName || "Nombre no disponible"}
+          </h2>
           <p className="text-gray-600">{cargo}</p>
-          {communityName && (
-            <h2 className="text-lg font-medium inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 text-white mt-1">{communityName}</h2>
-          )}
+          <div className="min-h-[56px] my-2 flex items-center justify-center">
+            {communityName ? (
+              <h2 className="text-lg font-medium inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 text-white fade-in-up">
+                {communityName}
+              </h2>
+            ) : null}
+          </div>
         </div>
 
         <div className="w-full">
           <div className="flex justify-between border-b border-gray-200 py-2">
-            <span className="font-medium text-gray-700">Correo electrónico:</span>
-            <span className="text-gray-900">{user.email || "No disponible"}</span>
+            <span className="font-medium text-gray-700">
+              Correo electrónico:
+            </span>
+            <span className="text-gray-900">
+              {user.email || "No disponible"}
+            </span>
           </div>
           <div className="flex justify-between border-b border-gray-200 py-2">
-            <span className="font-medium text-gray-700">Proveedor de autenticación:</span>
+            <span className="font-medium text-gray-700">
+              Proveedor de autenticación:
+            </span>
             <span className="text-gray-900">{provider}</span>
           </div>
           <div className="flex justify-between py-2">
@@ -102,4 +124,3 @@ export default function Perfil() {
     </div>
   );
 }
-
