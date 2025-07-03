@@ -58,7 +58,7 @@ export default function Dashboard() {
         <h1 className="text-3xl font-extralight text-black">Panel administrativo</h1>
         {communityName && (
           <div className="text-center mb-8">
-            <div className="inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 text-white">
+            <div className="inline-block bg-blue-600 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-2 rounded-full shadow-md shadow-pink-500/40 text-white">
               <p className="text-lg font-semibold">Comunidad {communityName}</p>
               {communityRut && <p className="text-xs font-bold">RUT: {communityRut}</p>}
             </div>
