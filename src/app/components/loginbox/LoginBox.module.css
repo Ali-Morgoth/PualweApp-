@@ -38,11 +38,13 @@
 
 .circle-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;  /* centra horizontal */
+  align-items: center;      /* centra vertical */
   width: 100%;
   height: 2.5rem;
   position: relative;
 }
+
 
 .circle-glow {
   width: 2rem;
@@ -100,7 +102,7 @@
 
 /*-------------------------*/
 
-
+/* Botón moderno */
 .button {
   overflow: hidden;
   cursor: pointer;
@@ -108,19 +110,19 @@
   margin-top: 0.5rem;
   padding: 0.5rem 0.75rem;
   width: 100%;
-  background-color: #1a73e8; /* azul principal */
+  background-color: rgb(122, 48, 143); /* morado base */
   background-image: linear-gradient(
-    135deg,
-    #4285f4 0%,
-    #1a73e8 50%,
-    #185abc 100%
+    90deg,
+    rgba(16, 5, 36, 1) 0%,         /* sombra lateral izquierda */
+    #1a73e8 50%,                   /* azul Google al centro */
+    rgba(16, 5, 36, 1) 100%        /* sombra lateral derecha */
   );
   font-size: 0.875rem;
   color: white;
   border: none;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 5px 1px #1a73e8;
-  transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+  box-shadow: 0px 0px 2px 1px rgb(122, 48, 143);
+  transition: all 0.3s cubic-bezier(1, 0, 0, 1), background-image 0.4s ease;
 }
 
 .text-button {
@@ -142,9 +144,9 @@
   left: 0;
   background-image: radial-gradient(
     circle at 0% 45%,
-    rgba(30, 90, 210, 1) 19%,
-    rgba(30, 90, 210, 0.3) 46%,
-    rgba(30, 90, 210, 0) 100%
+    rgba(16, 5, 36, 1) 19%,
+    rgba(16, 5, 36, 0.26) 46%,
+    rgba(16, 5, 36, 0) 100%
   );
 }
 
@@ -152,13 +154,19 @@
   right: 0;
   background-image: radial-gradient(
     circle at 100% 45%,
-    rgba(30, 90, 210, 1) 19%,
-    rgba(30, 90, 210, 0.3) 46%,
-    rgba(30, 90, 210, 0) 100%
+    rgba(16, 5, 36, 1) 19%,
+    rgba(16, 5, 36, 0.26) 46%,
+    rgba(16, 5, 36, 0) 100%
   );
 }
 
 .button:hover {
+  background-image: linear-gradient(
+    135deg,
+    #4285f4 0%,
+    #1a73e8 50%,
+    #185abc 100%
+  );
   box-shadow: 0px 0px 20px 0 #4285f4;
 }
 

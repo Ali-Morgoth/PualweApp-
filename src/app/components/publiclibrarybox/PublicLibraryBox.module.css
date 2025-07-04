@@ -106,29 +106,36 @@
 }
 /*---------------------------------------*/
 /* Botón moderno */
-.button {
+
+.button-library {
   overflow: hidden;
   cursor: pointer;
   position: relative;
   margin-top: 0.5rem;
   padding: 0.5rem 0.75rem;
   width: 100%;
-  background-color: rgb(122, 48, 143);
+  background-color: rgb(122, 48, 143); /* morado base */
+  background-image: linear-gradient(
+    90deg,
+    rgba(16, 5, 36, 1) 0%,         /* sombra lateral izquierda */
+    #1a73e8 50%,                   /* azul Google al centro */
+    rgba(16, 5, 36, 1) 100%        /* sombra lateral derecha */
+  );
   font-size: 0.875rem;
   color: white;
   border: none;
   border-radius: 0.5rem;
   box-shadow: 0px 0px 2px 1px rgb(122, 48, 143);
-  transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+  transition: all 0.3s cubic-bezier(1, 0, 0, 1), background-image 0.4s ease;
 }
 
-.text-button {
+.text-button-library {
   position: relative;
   z-index: 10;
 }
 
-.button::before,
-.button::after {
+.button-library::before,
+.button-library::after {
   content: "";
   position: absolute;
   top: 0;
@@ -137,7 +144,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-.button::before {
+.button-library::before {
   left: 0;
   background-image: radial-gradient(
     circle at 0% 45%,
@@ -147,7 +154,7 @@
   );
 }
 
-.button::after {
+.button-library::after {
   right: 0;
   background-image: radial-gradient(
     circle at 100% 45%,
@@ -157,12 +164,18 @@
   );
 }
 
-.button:hover {
-  box-shadow: 0px 0px 20px 0 rgb(122, 48, 143);
+.button-library:hover {
+   background-image: linear-gradient(
+    135deg,
+    #4285f4 0%,
+    #1a73e8 50%,
+    #185abc 100%
+  );
+  box-shadow: 0px 0px 20px 0 #4285f4;
 }
 
-.button:hover::before,
-.button:hover::after {
+.button-library:hover::before,
+.button-library:hover::after {
   width: 0;
   opacity: 0;
 }

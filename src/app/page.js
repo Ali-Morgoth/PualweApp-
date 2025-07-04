@@ -16,10 +16,12 @@ export default function Home() {
       {/* Imagen de fondo con next/image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/pualwe_bg.jpg"
+          src="/pualwe_bg.webp"
           alt="Fondo Pualwe"
           fill
           priority
+          placeholder="blur"
+          blurDataURL="/pualwe_blur.jpg" // usa una versión muy pequeña (10x10) codificada como JPG o base64
           className={`object-cover transition duration-300 ${
             isBlurred ? "blur-md" : ""
           }`}
