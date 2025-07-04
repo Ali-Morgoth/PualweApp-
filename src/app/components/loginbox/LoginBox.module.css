@@ -175,3 +175,13 @@
   width: 0;
   opacity: 0;
 }
+
+/*linea divisora ----------------*/
+.divider {
+  width: 90%;             /* No todo el ancho */
+  height: 2px;
+  background-color: white;
+  opacity: 0.4;
+  margin: -0.25rem auto 0.5rem auto; /* Centrado y separado del título y subtítulo */
+  border-radius: 9999px;
+}

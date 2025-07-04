@@ -44,6 +44,7 @@ export default function LoginBox({ onLoginValidated }) {
         <UserGroupIcon className="h-8 w-8 text-white animate-pulse"/>
       </div>
       <h2 className={styles.title}>Acceso a socios</h2>
+      <div className={styles.divider}></div> {/* Línea decorativa */}
       <h3 className="text-white text-sm subtitle">
         Si perteneces a una comunidad registrada de San Juan de la Costa
       </h3>
