@@ -45,7 +45,7 @@ export default function LoginBox({ onLoginValidated }) {
       </div>
       <h2 className={styles.title}>Acceso a socios</h2>
       <div className={styles.divider}></div> {/* Línea decorativa */}
-      <h3 className="text-white text-sm subtitle">
+    <h3 className={`text-white text-sm ${styles.subtitle}`}>
         Si perteneces a una comunidad registrada de San Juan de la Costa
       </h3>
       <button onClick={handleLogin} className={styles.button}>

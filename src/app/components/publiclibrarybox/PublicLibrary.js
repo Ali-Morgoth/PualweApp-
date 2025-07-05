@@ -31,7 +31,7 @@ export default function PublicLibraryBox() {
       <h2 className={styles.title}>Biblioteca Pública</h2>
       <div className={styles.divider}></div>
 
-      <h3 className="text-white text-sm subtitle">
+      <h3 className={`text-white text-sm ${styles.subtitle}`}>
         Recopilatorio histórico mapuche huilliche de San Juan de la Costa
       </h3>
 
