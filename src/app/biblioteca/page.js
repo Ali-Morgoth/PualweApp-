@@ -23,6 +23,7 @@ export default function Biblioteca() {
         <Image
           src="/biblioteca_publica.webp"
           alt="Fondo biblioteca"
+          blurDataURL="/biblioteca_blur.jpg" // genera una imagen pequeña tipo blur
           fill
           className="object-cover blur-[3.5px]"
           priority
