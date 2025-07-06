@@ -35,6 +35,8 @@ export default function RootLayout({ children }) {
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
         {/* FAVICON para pestaña del navegador */}
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+       
+
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClientWrapper>{children}</ClientWrapper>

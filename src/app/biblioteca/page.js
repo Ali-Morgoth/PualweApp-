@@ -46,7 +46,8 @@ export default function Biblioteca() {
       nombre: "Cosmovisión",
       path: "cosmovision",
       imagen: "/cosmovision.webp",
-      descripcion: "Perspectiva espiritual y filosófica del pueblo mapuche huilliche.",
+      descripcion:
+        "Perspectiva espiritual y filosófica del pueblo mapuche huilliche.",
     },
     {
       nombre: "Arte y música",
@@ -134,50 +135,57 @@ export default function Biblioteca() {
           <div className="cover front-side"></div>
           <div className="cover back-side"></div>
         </div>
-        <h1 className="font-extralight text-white">Biblioteca Pública</h1>
+      <h1
+  className="font-extralight"
+  style={{ color: 'rgba(255, 255, 255, 0.38)' }}
+>
+  BIBLIOTECA PÚBLICA
+</h1>
+
       </div>
 
       {/* Carrusel horizontal */}
- {/* Contenedor que empuja hacia abajo en móviles */}
-<div className="mt-20 sm:mt-0 flex justify-center">
-  {/* Carrusel horizontal */}
-  <div
-    ref={scrollRef}
-    onWheel={handleUserInteraction}
-    onTouchStart={handleUserInteraction}
-    onMouseDown={handleMouseDown}
-    onMouseMove={handleMouseMove}
-    onMouseUp={handleMouseUp}
-    onMouseLeave={handleMouseUp}
-    className="flex gap-4 overflow-x-auto no-scrollbar py-6 px-2 z-20 relative scroll-smooth whitespace-nowrap cursor-grab active:cursor-grabbing"
-  >
-    {categorias.map((cat) => (
-      <div
-        key={cat.path}
-        className="inline-block w-[280px] h-auto min-h-[360px] shrink-0 bg-[#3dab9a55] backdrop-blur-md rounded-lg border border-white/20 shadow-md flex flex-col"
-      >
-        <img
-          src={cat.imagen}
-          alt={cat.nombre}
-          className="w-full h-40 object-cover rounded-t-lg"
-        />
-        <div className="flex-grow flex flex-col p-4 text-white">
-          <h2 className="text-lg font-light mb-1">{cat.nombre}</h2>
-          <div className="text-sm text-white text-opacity-80 mb-4 w-full break-words whitespace-normal overflow-hidden">
-            {cat.descripcion}
-          </div>
-          <button
-            onClick={() => router.push(`/biblioteca/${cat.path}`)}
-            className="mt-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          >
-            Ver {cat.nombre}
-          </button>
+      {/* Contenedor que empuja hacia abajo en móviles */}
+      <div className="mt-20 sm:mt-0 flex justify-center">
+        {/* Carrusel horizontal */}
+        <div
+          ref={scrollRef}
+          onWheel={handleUserInteraction}
+          onTouchStart={handleUserInteraction}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          className="flex gap-4 overflow-x-auto no-scrollbar py-6 px-2 z-20 relative scroll-smooth whitespace-nowrap cursor-grab active:cursor-grabbing"
+        >
+          {categorias.map((cat) => (
+            <div
+              key={cat.path}
+              className="inline-block w-[280px] h-auto min-h-[360px] shrink-0 bg-[#3dab9a55] backdrop-blur-md rounded-lg border border-white/20 shadow-md flex flex-col"
+            >
+              <img
+                src={cat.imagen}
+                alt={cat.nombre}
+                className="w-full h-40 object-cover rounded-t-lg"
+              />
+              <div className="flex-grow flex flex-col p-4 text-white">
+                <h2 className="text-lg font-light mb-1 text-[#14fed3]">{cat.nombre}</h2>
+                <div className="text-sm text-white text-opacity-80 mb-4 w-full break-words whitespace-normal overflow-hidden">
+                  {cat.descripcion}
+                </div>
+                <button
+                  onClick={() => router.push(`/biblioteca/${cat.path}`)}
+                  className="button-categories mt-7"
+                >
+                  <span className="button-categories-text">
+                    Ver {cat.nombre}
+                  </span>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    ))}
-  </div>
-</div>
-
     </div>
   );
 }
