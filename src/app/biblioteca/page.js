@@ -53,7 +53,7 @@ export default function Biblioteca() {
     {
       nombre: "Arte y música",
       path: "arte",
-      imagen: "/arte.webp",
+      imagen: "/musica_y_arte.webp",
       descripcion: "Expresiones artísticas y musicales ancestrales.",
     },
   ];
@@ -121,7 +121,7 @@ export default function Biblioteca() {
           fill
           className="object-cover blur-[3.5px]"
           priority
-          onLoadingComplete={() => setBgLoaded(true)}
+          onLoad={() => setBgLoaded(true)}
         />
       </div>
 
@@ -163,10 +163,13 @@ export default function Biblioteca() {
               key={cat.path}
               className="inline-block w-[280px] h-auto min-h-[360px] shrink-0 bg-[#3dab9a55] backdrop-blur-md rounded-lg border border-white/20 shadow-md flex flex-col"
             >
-              <img
+              <Image
                 src={cat.imagen}
                 alt={cat.nombre}
+                width={280}
+                height={160}
                 className="w-full h-40 object-cover rounded-t-lg"
+      
               />
               <div className="flex-grow flex flex-col p-4 text-white">
                 <h2 className="text-lg font-light mb-1 text-[#14fed3]">
