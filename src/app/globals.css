@@ -441,3 +441,15 @@ body {
 .fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
 }
+
+
+
+/* interaccion de carousel biblioteca, Oculta scrollbar horizontal */ 
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
