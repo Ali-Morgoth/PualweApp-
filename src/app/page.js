@@ -9,22 +9,32 @@ import InstallPrompt from "./components/installer/InstallPromtp";
 
 export default function Home() {
   const [isBlurred, setIsBlurred] = useState(false);
-  const [showLoader, setShowLoader] = useState(false); // ← nuevo estado
+  const [showLoader, setShowLoader] = useState(false);
+  // Estado para controlar el fade-in de la imagen de fondo
+  const [bgLoaded, setBgLoaded] = useState(false);
 
   return (
     <div className="relative min-h-screen flex flex-col md:flex-row overflow-hidden">
-      {/* Imagen de fondo con next/image */}
-      <div className="absolute inset-0 -z-10">
+      {/* Fondo blanco-gris semitransparente antes de la imagen */}
+      <div className="absolute inset-0 -z-20 bg-[rgba(245,245,245,0.6)]" />
+
+      {/* Imagen de fondo con fade-in */}
+      <div
+        className={`absolute inset-0 -z-10 transition-opacity duration-1000 ${
+          bgLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <Image
           src="/pualwe_bg.webp"
           alt="Fondo Pualwe"
           fill
           priority
           placeholder="blur"
-          blurDataURL="/pualwe_blur.jpg" // usa una versión muy pequeña (10x10) codificada como JPG o base64
+          blurDataURL="/pualwe_blur.jpg"
           className={`object-cover transition duration-300 ${
             isBlurred ? "blur-md" : ""
           }`}
+          onLoadingComplete={() => setBgLoaded(true)}
         />
       </div>
 
