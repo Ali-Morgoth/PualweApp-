@@ -9,20 +9,22 @@ export default function Biblioteca() {
   const router = useRouter();
   const scrollRef = useRef(null);
   const [autoScroll, setAutoScroll] = useState(true);
-  const [scrollDirection, setScrollDirection] = useState(1); // 1 = right, -1 = left
+  const [scrollDirection, setScrollDirection] = useState(1);
   const scrollInterval = useRef(null);
   const timeoutRef = useRef(null);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const scrollStart = useRef(0);
 
+  // Estado para controlar la opacidad del fondo
+  const [bgLoaded, setBgLoaded] = useState(false);
+
   const categorias = [
     {
       nombre: "Historia",
       path: "historia",
       imagen: "/historia.webp",
-      descripcion:
-        "Descubre los hechos históricos del pueblo mapuche huilliche.",
+      descripcion: "Descubre los hechos históricos del pueblo mapuche huilliche.",
     },
     {
       nombre: "Investigaciones",
@@ -46,8 +48,7 @@ export default function Biblioteca() {
       nombre: "Cosmovisión",
       path: "cosmovision",
       imagen: "/cosmovision.webp",
-      descripcion:
-        "Perspectiva espiritual y filosófica del pueblo mapuche huilliche.",
+      descripcion: "Perspectiva espiritual y filosófica del pueblo mapuche huilliche.",
     },
     {
       nombre: "Arte y música",
@@ -63,10 +64,7 @@ export default function Biblioteca() {
 
     scrollInterval.current = setInterval(() => {
       container.scrollLeft += scrollDirection;
-
       const maxScroll = container.scrollWidth - container.clientWidth;
-
-      // Usamos Math.round para evitar fallos por valores decimales
       const currentScroll = Math.round(container.scrollLeft);
 
       if (currentScroll >= Math.round(maxScroll)) {
@@ -107,8 +105,15 @@ export default function Biblioteca() {
 
   return (
     <div className="relative min-h-screen p-6 overflow-hidden select-none">
-      {/* Imagen de fondo */}
-      <div className="absolute inset-0 -z-10">
+      {/* Fondo sólido con color semitransparente */}
+      <div className="absolute inset-0 -z-20 bg-[rgba(18,34,37,0.64)]"></div>
+
+      {/* Imagen de fondo con fade-in */}
+      <div
+        className={`absolute inset-0 -z-10 transition-opacity duration-1000 ${
+          bgLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <Image
           src="/biblioteca_publica.webp"
           alt="Fondo biblioteca"
@@ -116,6 +121,7 @@ export default function Biblioteca() {
           fill
           className="object-cover blur-[3.5px]"
           priority
+          onLoadingComplete={() => setBgLoaded(true)}
         />
       </div>
 
@@ -135,19 +141,13 @@ export default function Biblioteca() {
           <div className="cover front-side"></div>
           <div className="cover back-side"></div>
         </div>
-      <h1
-  className="font-extralight"
-  style={{ color: 'rgba(255, 255, 255, 0.38)' }}
->
-  BIBLIOTECA PÚBLICA
-</h1>
-
+        <h1 className="font-extralight" style={{ color: "rgba(255,255,255,0.38)" }}>
+          BIBLIOTECA PÚBLICA
+        </h1>
       </div>
 
       {/* Carrusel horizontal */}
-      {/* Contenedor que empuja hacia abajo en móviles */}
       <div className="mt-20 sm:mt-0 flex justify-center">
-        {/* Carrusel horizontal */}
         <div
           ref={scrollRef}
           onWheel={handleUserInteraction}
@@ -169,7 +169,9 @@ export default function Biblioteca() {
                 className="w-full h-40 object-cover rounded-t-lg"
               />
               <div className="flex-grow flex flex-col p-4 text-white">
-                <h2 className="text-lg font-light mb-1 text-[#14fed3]">{cat.nombre}</h2>
+                <h2 className="text-lg font-light mb-1 text-[#14fed3]">
+                  {cat.nombre}
+                </h2>
                 <div className="text-sm text-white text-opacity-80 mb-4 w-full break-words whitespace-normal overflow-hidden">
                   {cat.descripcion}
                 </div>
@@ -177,9 +179,7 @@ export default function Biblioteca() {
                   onClick={() => router.push(`/biblioteca/${cat.path}`)}
                   className="button-categories mt-7"
                 >
-                  <span className="button-categories-text">
-                    Ver {cat.nombre}
-                  </span>
+                  <span className="button-categories-text">Ver {cat.nombre}</span>
                 </button>
               </div>
             </div>
