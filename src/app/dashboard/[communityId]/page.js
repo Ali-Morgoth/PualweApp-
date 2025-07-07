@@ -111,7 +111,7 @@ export default function Dashboard() {
                     router.push(`/dashboard/${communityId}/${btn.path}`);
                   }
                 }}
-                className="radio-tile flex flex-col items-center justify-center gap-2 p-4 w-28 h-28 md:w-36 md:h-36 rounded-lg border-2 border-gray-300 bg-white shadow-lg cursor-pointer hover:border-[#14fed3] peer-checked:border-blue-600 peer-checked:text-blue-600 transition-all"
+                className="radio-tile flex flex-col items-center justify-center gap-2 p-4 w-28 h-28 md:w-36 md:h-36 rounded-lg border-2 border-gray-300 bg-white shadow-lg cursor-pointer hover:border-purple-400 peer-checked:border-blue-600 peer-checked:text-blue-600 transition-all"
               >
                 <div className="text-gray-600 peer-checked:text-blue-600">
                   {btn.icon}

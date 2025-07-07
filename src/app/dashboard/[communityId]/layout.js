@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }) {
                     setMenuOpen(false);
                     router.push("/perfil");
                   }}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 transition-colors duration-200 ease-in-out cursor-pointer"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-colors duration-200 ease-in-out cursor-pointer"
                 >
                   <UserCircleIcon className="w-5 h-5" />
                   Perfil
@@ -138,7 +138,7 @@ export default function DashboardLayout({ children }) {
                     setMenuOpen(false);
                     router.push("/administrador");
                   }}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 transition-colors duration-200 ease-in-out cursor-pointer"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-colors duration-200 ease-in-out cursor-pointer"
                 >
                   <Cog6ToothIcon className="w-5 h-5" />
                   Administrador
@@ -148,7 +148,7 @@ export default function DashboardLayout({ children }) {
                     setMenuOpen(false);
                     router.push("/ayuda");
                   }}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 transition-colors duration-200 ease-in-out cursor-pointer"
+                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 transition-colors duration-200 ease-in-out cursor-pointer hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600"
                 >
                   <QuestionMarkCircleIcon className="w-5 h-5" />
                   Ayuda
@@ -159,14 +159,14 @@ export default function DashboardLayout({ children }) {
                     setMenuOpen(false);
                     router.push("/privacypolicy");
                   }}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 whitespace-nowrap transition-colors duration-200 ease-in-out cursor-pointer"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 whitespace-nowrap transition-colors duration-200 ease-in-out cursor-pointer"
                 >
                   <ShieldCheckIcon className="w-5 h-5 flex-shrink-0" />
                   Política y privacidad
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-300 transition-colors duration-200 ease-in-out cursor-pointer"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-colors duration-200 ease-in-out cursor-pointer"
                 >
                   <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                   Cerrar sesión

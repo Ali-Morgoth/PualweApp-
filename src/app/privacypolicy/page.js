@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
         <h2 className="text-xl font-semibold mb-2">1. Introducción</h2>
         <p>
           Esta Política de Privacidad describe cómo <strong>Pualwe App</strong>,
-          desarrollado por Alian Andahur, recopila, utiliza y protege la
+          desarrollado por el analista de sistemas y programador Alian Andahur, recopila, utiliza y protege la
           información que proporcionan los usuarios dentro del sistema. Esta
           plataforma está diseñada para el uso exclusivo de comunidades
           indígenas, resguardando tanto la información privada como los

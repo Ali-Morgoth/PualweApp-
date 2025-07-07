@@ -147,7 +147,7 @@ export default function Biblioteca() {
           className="font-extralight"
           style={{ color: "rgba(255,255,255,0.38)" }}
         >
-          BIBLIOTECA PÚBLICA
+          Biblioteca Pública
         </h1>
       </div>
 
