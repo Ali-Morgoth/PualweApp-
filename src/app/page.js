@@ -34,7 +34,8 @@ export default function Home() {
           className={`object-cover transition duration-300 ${
             isBlurred ? "blur-md" : ""
           }`}
-          onLoadingComplete={() => setBgLoaded(true)}
+          onLoad={() => setBgLoaded(true)}
+
         />
       </div>
 
