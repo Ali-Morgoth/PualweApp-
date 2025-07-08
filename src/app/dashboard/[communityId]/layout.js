@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-[#f0f9f8]">
-      <div className="w-full flex justify-between items-center p-4 bg-white shadow-md sticky top-0 z-50">
+      <div className="w-full flex justify-between items-center p-2 sm:p-2 bg-white shadow-md sticky top-0 z-50">
         <div className="flex gap-4 items-center">
           {/* Botón Home */}
           <button
@@ -101,66 +101,27 @@ export default function DashboardLayout({ children }) {
         {/* Menú de usuario */}
         {user && (
           <div className="relative" ref={menuRef}>
-            {/* <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="flex flex-row-reverse items-center gap-2 focus:outline-none"
-            >
-              {user.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt={user.displayName}
-                  className="w-9 h-9 rounded-full border border-gray-300 object-cover"
-                />
-              ) : (
-                <div className="w-9 h-9 rounded-full border border-gray-300 bg-blue-600 flex items-center justify-center text-white font-semibold uppercase">
-                  {user.displayName ? user.displayName.charAt(0) : "U"}
-                </div>
-              )}
-              <span className="text-gray-700 font-medium text-sm truncate max-w-[100px]">
-                {user.displayName}
-              </span>
-            </button> */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="cta-custom flex items-center gap-2 focus:outline-none border-none"
+              className="cta-custom flex items-center gap-1 focus:outline-none border-none"
             >
-              <div className="span flex items-center gap-2">
+              <div className="span flex items-center gap-1">
                 {user.photoURL ? (
                   <img
                     src={user.photoURL}
                     alt={user.displayName}
-                    className="w-9 h-9 rounded-full border border-gray-300 object-cover"
+                    className="w-8 h-8 rounded-full border border-gray-300 object-cover"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full border border-gray-300 bg-blue-600 flex items-center justify-center text-white font-semibold uppercase">
+                  <div className="w-8 h-8 rounded-full border border-gray-300 bg-blue-600 flex items-center justify-center text-white font-semibold uppercase">
                     {user.displayName ? user.displayName.charAt(0) : "U"}
                   </div>
                 )}
                 <span className="text-white font-medium text-sm truncate max-w-[100px]">
                   {user.displayName}
                 </span>
+                <UserCircleIcon className="w-5 h-5 text-white ml-1" />
               </div>
-
-              <svg
-                viewBox="0 0 13 10"
-                height="10px"
-                width="15px"
-                className="second"
-              >
-                <path
-                  d="M1,5 L11,5"
-                  stroke="white"
-                  strokeWidth="2"
-                  className="one"
-                ></path>
-                <path
-                  d="M8,1 L12,5 L8,9"
-                  stroke="white"
-                  strokeWidth="2"
-                  fill="none"
-                  className="two"
-                ></path>
-              </svg>
             </button>
 
             {menuOpen && (

@@ -534,11 +534,10 @@ body {
 
 
 
-/*estilo boton menu user*/ 
+/*estilo boton menu user Angular Button estilo personalizado*/ 
 
-/* Angular Button estilo personalizado */
 .cta-custom {
-  padding: 11px 24px;
+  padding: 5px 10px;
   background: linear-gradient(to right, #2563eb, #9333ea, #ec4899);
   color: white;
   font-size: 16px;
@@ -547,6 +546,8 @@ body {
   box-shadow: 6px 6px 0 black;
   border: none;
   cursor: pointer;
+  margin-top: 0px;
+   
 }
 
 .cta-custom:hover {
@@ -604,5 +605,19 @@ body {
   }
   100% {
     stroke: white;
+  }
+}
+
+
+/* 🧠 Responsive: reducir ancho en pantallas pequeñas */
+@media (max-width: 640px) {
+  .cta-custom {
+    width: fit-content;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .second {
+    margin-left: 10px;
   }
 }
