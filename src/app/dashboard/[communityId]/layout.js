@@ -101,7 +101,7 @@ export default function DashboardLayout({ children }) {
         {/* Menú de usuario */}
         {user && (
           <div className="relative" ref={menuRef}>
-            <button
+            {/* <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="flex flex-row-reverse items-center gap-2 focus:outline-none"
             >
@@ -119,6 +119,48 @@ export default function DashboardLayout({ children }) {
               <span className="text-gray-700 font-medium text-sm truncate max-w-[100px]">
                 {user.displayName}
               </span>
+            </button> */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="cta-custom flex items-center gap-2 focus:outline-none border-none"
+            >
+              <div className="span flex items-center gap-2">
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    className="w-9 h-9 rounded-full border border-gray-300 object-cover"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full border border-gray-300 bg-blue-600 flex items-center justify-center text-white font-semibold uppercase">
+                    {user.displayName ? user.displayName.charAt(0) : "U"}
+                  </div>
+                )}
+                <span className="text-white font-medium text-sm truncate max-w-[100px]">
+                  {user.displayName}
+                </span>
+              </div>
+
+              <svg
+                viewBox="0 0 13 10"
+                height="10px"
+                width="15px"
+                className="second"
+              >
+                <path
+                  d="M1,5 L11,5"
+                  stroke="white"
+                  strokeWidth="2"
+                  className="one"
+                ></path>
+                <path
+                  d="M8,1 L12,5 L8,9"
+                  stroke="white"
+                  strokeWidth="2"
+                  fill="none"
+                  className="two"
+                ></path>
+              </svg>
             </button>
 
             {menuOpen && (
@@ -133,7 +175,7 @@ export default function DashboardLayout({ children }) {
                   <UserCircleIcon className="w-5 h-5" />
                   Perfil
                 </button>
-                  <button
+                <button
                   onClick={() => {
                     setMenuOpen(false);
                     router.push("/administrador");
@@ -148,12 +190,12 @@ export default function DashboardLayout({ children }) {
                     setMenuOpen(false);
                     router.push("/ayuda");
                   }}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 transition-colors duration-200 ease-in-out cursor-pointer hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 transition-colors duration-200 ease-in-out cursor-pointer hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:via-purple-600 hover:to-pink-600"
                 >
                   <QuestionMarkCircleIcon className="w-5 h-5" />
                   Ayuda
                 </button>
-              
+
                 <button
                   onClick={() => {
                     setMenuOpen(false);
