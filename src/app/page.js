@@ -73,7 +73,7 @@ export default function Home() {
             <div className="cool-card">
               <span className="circleLight"></span>
               <div className="card-text">
-                <LoginBox onLoginValidated={() => setShowLoader(true)} />
+               <LoginBox setShowLoader={setShowLoader} />
               </div>
             </div>
           </div>
