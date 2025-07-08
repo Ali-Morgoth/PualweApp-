@@ -93,10 +93,9 @@ export default function PrivacyPolicy() {
         <div className="absolute top-[120px] left-1/2 transform -translate-x-1/2 h-[calc(100%-120px)] w-0.5 bg-green-200 rounded z-0" />
 
         {/* Título */}
-        <h1 className="text-3xl font-bold mb-2 text-center text-gray-800">
+        <h1 className="text-2xl mb-9 font-bold text-center text-gray-800">
           Política de Privacidad – Pualwe App
         </h1>
-      
 
         {/* Timeline sections */}
         {[
@@ -137,9 +136,10 @@ export default function PrivacyPolicy() {
                   <li>Nombre de usuario o comunidad</li>
                   <li>Correo electrónico (para autenticación)</li>
                   <li>
-                    Documentos subidos por las comunidades (Exclusivamente archivos .PDF los cuales contienen textos e imagenes ) solo visibles para socios de una comunidad
-                    permaneciendo esta completamente privada a excepción de los
-                    libros
+                    Documentos subidos por las comunidades (Exclusivamente
+                    archivos .PDF los cuales contienen textos e imagenes ) solo
+                    visibles para socios de una comunidad permaneciendo esta
+                    completamente privada a excepción de los libros
                   </li>
                   <li>Datos técnicos (IP, navegador, dispositivo)</li>
                 </ul>
@@ -206,13 +206,13 @@ export default function PrivacyPolicy() {
                   <li>Rectificar o eliminar su información</li>
                   <li>Retirar el consentimiento en cualquier momento</li>
                 </ul>
-                <p>   Para ejecer estos derechos contacta a:</p>
+                <p> Para ejecer estos derechos contacta a:</p>
                 <a
-                    href="https://alian-andahur.vercel.app"
-                    className="text-blue-600 hover:underline"
-                  >  
-                    https://alian-andahur.vercel.app
-                  </a>
+                  href="https://alian-andahur.vercel.app"
+                  className="text-blue-600 hover:underline"
+                >
+                  https://alian-andahur.vercel.app
+                </a>
               </>
             ),
           },
@@ -240,11 +240,12 @@ export default function PrivacyPolicy() {
             title: "10. Protección de menores",
             content: (
               <p>
-                Pualwe App en su sección intranet privada no está dirigida a menores de edad. No recopilamos
-                intencionalmente información de niños sin el consentimiento
-                verificable de sus padres o tutores. Si tienes conocimiento de
-                que un menor ha proporcionado información personal sin
-                autorización, por favor contáctanos para eliminarla.
+                Pualwe App en su sección intranet privada no está dirigida a
+                menores de edad. No recopilamos intencionalmente información de
+                niños sin el consentimiento verificable de sus padres o tutores.
+                Si tienes conocimiento de que un menor ha proporcionado
+                información personal sin autorización, por favor contáctanos
+                para eliminarla.
               </p>
             ),
           },
@@ -277,8 +278,10 @@ export default function PrivacyPolicy() {
               index % 2 === 0 ? "justify-start" : "justify-end"
             } ${
               visibleSections.includes(index)
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
+                ? "opacity-100 translate-x-0"
+                : index % 2 === 0
+                ? "opacity-0 -translate-x-10"
+                : "opacity-0 translate-x-10"
             }`}
           >
             {/* Punto circular */}
