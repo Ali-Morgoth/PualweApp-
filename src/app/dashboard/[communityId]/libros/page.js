@@ -448,13 +448,13 @@ export default function Libros({ modoPublico = false }) {
               </button>
               <button
                 type="submit"
-                disabled={isUploading}
-                className={`px-4 py-2 rounded text-white transition 
-                  ${
-                    isUploading
-                      ? "bg-green-400 cursor-not-allowed"
-                      : "bg-green-600 hover:bg-green-700"
-                  }`}
+                disabled={isUploading || tituloDuplicado}
+                className={`px-4 py-2 rounded text-white transition duration-200
+    ${
+      isUploading || tituloDuplicado
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-green-600 hover:bg-green-700"
+    }`}
               >
                 {isUploading ? (
                   <span className="flex items-center gap-2">
