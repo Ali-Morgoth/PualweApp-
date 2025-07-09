@@ -13,6 +13,7 @@ import {
   doc,
   getDoc,
   where,
+  getDocs,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -41,6 +42,8 @@ export default function Libros({ modoPublico = false }) {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [tituloDuplicado, setTituloDuplicado] = useState(false);
+  const [checkingTitulo, setCheckingTitulo] = useState(false);
 
   // Detectar usuario y obtener communityId
   useEffect(() => {
@@ -56,7 +59,9 @@ export default function Libros({ modoPublico = false }) {
             setCommunityId(adminDoc.data().communityId);
           } else {
             setUserRole("user");
-            const userDoc = await getDoc(doc(db, "authorizedUsers", user.email));
+            const userDoc = await getDoc(
+              doc(db, "authorizedUsers", user.email)
+            );
             if (userDoc.exists()) {
               setCommunityId(userDoc.data().communityId);
             }
@@ -110,8 +115,23 @@ export default function Libros({ modoPublico = false }) {
     return () => unsubscribe();
   }, [categoriaFiltro, communityId, modoPublico]);
 
+  const verificarTituloExistente = async (titulo) => {
+    if (!titulo.trim()) {
+      setTituloDuplicado(false);
+      return;
+    }
+
+    setCheckingTitulo(true);
+    const librosRef = collection(db, "libros");
+    const q = query(librosRef, where("titulo", "==", titulo.trim()));
+    const snapshot = await getDocs(q);
+    setTituloDuplicado(!snapshot.empty);
+    setCheckingTitulo(false);
+  };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === "archivo") {
       if (files[0]?.type !== "application/pdf") {
         alert("Solo se permiten archivos PDF.");
@@ -120,6 +140,11 @@ export default function Libros({ modoPublico = false }) {
       setFormData({ ...formData, archivo: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
+
+      // Validación del título en tiempo real
+      if (name === "titulo") {
+        verificarTituloExistente(value); // Llama a la función que consulta Firestore
+      }
     }
   };
 
@@ -160,6 +185,10 @@ export default function Libros({ modoPublico = false }) {
       alert("Hubo un error al subir el documento.");
     } finally {
       setIsUploading(false);
+    }
+    if (tituloDuplicado) {
+      alert("El título ya está registrado, por favor elige otro.");
+      return;
     }
   };
 
@@ -299,7 +328,10 @@ export default function Libros({ modoPublico = false }) {
             </h2>
 
             <div className="mb-4">
-              <label htmlFor="titulo" className="block text-gray-700 font-medium mb-1">
+              <label
+                htmlFor="titulo"
+                className="block text-gray-700 font-medium mb-1"
+              >
                 Título
               </label>
               <input
@@ -308,14 +340,34 @@ export default function Libros({ modoPublico = false }) {
                 name="titulo"
                 value={formData.titulo}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-green-500"
+                className={`w-full border rounded px-3 py-2 text-black focus:outline-none 
+      ${
+        tituloDuplicado
+          ? "border-red-500 focus:ring-red-500"
+          : "border-gray-300 focus:ring-green-500"
+      }`}
                 required
                 disabled={isUploading}
               />
+
+              {/* Contenedor que siempre ocupa altura */}
+              <div className="min-h-[1.25rem] mt-1">
+                {checkingTitulo && (
+                  <p className="text-sm text-gray-500">Verificando título...</p>
+                )}
+                {!checkingTitulo && tituloDuplicado && (
+                  <p className="text-sm text-red-600">
+                    Este título ya está registrado.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="mb-4">
-              <label htmlFor="autor" className="block text-gray-700 font-medium mb-1">
+              <label
+                htmlFor="autor"
+                className="block text-gray-700 font-medium mb-1"
+              >
                 Autor
               </label>
               <input
@@ -331,7 +383,10 @@ export default function Libros({ modoPublico = false }) {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="categoria" className="block text-gray-700 font-medium mb-1">
+              <label
+                htmlFor="categoria"
+                className="block text-gray-700 font-medium mb-1"
+              >
                 Categoría
               </label>
               <select
@@ -353,7 +408,10 @@ export default function Libros({ modoPublico = false }) {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="archivo" className="block text-gray-700 font-medium mb-1">
+              <label
+                htmlFor="archivo"
+                className="block text-gray-700 font-medium mb-1"
+              >
                 Archivo PDF
               </label>
               <input
@@ -392,7 +450,11 @@ export default function Libros({ modoPublico = false }) {
                 type="submit"
                 disabled={isUploading}
                 className={`px-4 py-2 rounded text-white transition 
-                  ${isUploading ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+                  ${
+                    isUploading
+                      ? "bg-green-400 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
               >
                 {isUploading ? (
                   <span className="flex items-center gap-2">
