@@ -40,8 +40,8 @@ export default function ClientWrapper({ children }) {
       <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center gap-6">
         {/* Imagen superior */}
         <Image
-          src="/logo_kiyemtuain_bg.png"
-          alt="Logo Kiyemtuain"
+          src="/pualwe_logo.png"
+          alt="Logo Pualwe"
           width={120}
           height={120}
           priority

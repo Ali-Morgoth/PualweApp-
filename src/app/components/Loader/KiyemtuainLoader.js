@@ -34,7 +34,7 @@ export default function KiyemtuainLoader({ useImage = false }) {
           height: 50%;
           inset: 0;
           margin: auto;
-          background-color: #5c469c;
+          background-color: #87cec1;
           z-index: 2;
           border-radius: 6px;
           animation: loading 2s infinite reverse;
