@@ -85,10 +85,10 @@ export default function Home() {
             <KiyemtuainLoader useImage />
           </div>
           <div className="custom-tooltip-container">
-            <button className="custom-tooltip-btn">Comunidad Kiyemtuain</button>
+            <button className="custom-tooltip-btn">Pualwe App Comunidades</button>
             <div className="custom-tooltip-content">
               <div className="custom-tooltip-text">
-                Esta es una comunidad dedicada a compartir saberes ancestrales
+                Esta es una aplicación dedicada a compartir saberes ancestrales
                 mapuche huilliche.
               </div>
               <div className="custom-tooltip-arrow"></div>

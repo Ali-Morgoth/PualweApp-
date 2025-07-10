@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 export default function KiyemtuainLoader({ useImage = false }) {
   return (
@@ -39,31 +39,33 @@ export default function KiyemtuainLoader({ useImage = false }) {
           border-radius: 6px;
           animation: loading 2s infinite reverse;
         }
-
         .loader-small-img {
           position: absolute;
           width: 50%;
           height: 50%;
           inset: 0;
           margin: auto;
-          background-image: url('/loader.png');
-          background-size: cover;
+          background-image: url('/pualwe_logo.png');
+          background-size: contain; /* Cambia a contain para respetar la calidad */
           background-position: center;
+          background-repeat: no-repeat;
+          image-rendering: auto; /* Usa esto para imágenes más nítidas */
           z-index: 2;
           border-radius: 6px;
-          animation: loading 2s infinite reverse;
+          animation: loading 6s infinite reverse;
+          filter: contrast(1.1) brightness(1.1); /* Aumenta la claridad */
         }
 
-        @keyframes loading {
-          0% {
-            transform: rotate(0deg);
+
+       @keyframes loading {
+        0% {
+        transform: rotateY(0deg);
+           }
+        100% {
+        transform: rotateY(360deg);
           }
-          50% {
-            transform: rotateY(180deg);
-          }
-          100% {
-            transform: rotateX(180deg);
-          }
+         }
+
         }
       `}</style>
     </div>
