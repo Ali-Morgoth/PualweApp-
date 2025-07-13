@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';
 import { db } from "../../app/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import fetch from "node-fetch";
