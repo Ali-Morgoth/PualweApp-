@@ -286,116 +286,7 @@ body {
 }
 
 /* Encabezado único Biblioteca Pública */
-.folder-header-container {
-  --transition: 350ms;
-  --folder-W: 80px;
-  --folder-H: 55px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 10px;
-  background-color: rgba(61, 171, 154, 0.33);
-  backdrop-filter: blur(8px);
 
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  height: calc(var(--folder-H) * 1.8);
-  width: 160px;
-  margin: 0 auto 40px auto; /* <- margen inferior */
-  position: relative;
-}
-
-.folder-header-folder {
-  position: absolute;
-  top: -1px; /* <- antes estaba -16px */
-  left: calc(50% - 40px);
-  animation: float 2.5s infinite ease-in-out;
-  transition: transform var(--transition) ease;
-  z-index: 3;
-}
-
-.folder-header-folder:hover {
-  transform: scale(1.05);
-}
-
-.folder-header-folder .front-side,
-.folder-header-folder .back-side {
-  position: absolute;
-  transition: transform var(--transition);
-  transform-origin: bottom center;
-}
-
-.folder-header-folder .back-side::before,
-.folder-header-folder .back-side::after {
-  content: "";
-  display: block;
-  background-color: white;
-  opacity: 0.5;
-  z-index: 1;
-  width: var(--folder-W);
-  height: var(--folder-H);
-  position: absolute;
-  transform-origin: bottom center;
-  border-radius: 12px;
-  transition: transform 350ms;
-}
-
-.folder-header-container:hover .back-side::before {
-  transform: rotateX(-5deg) skewX(5deg);
-}
-.folder-header-container:hover .back-side::after {
-  transform: rotateX(-15deg) skewX(12deg);
-}
-
-.folder-header-folder .front-side {
-  z-index: 3;
-}
-
-.folder-header-container:hover .front-side {
-  transform: rotateX(-40deg) skewX(15deg);
-}
-
-.folder-header-folder .tip {
-  background: linear-gradient(135deg, #ff9a56, #ff6f56);
-  width: 55px;
-  height: 14px;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: -8px;
-  z-index: 3;
-}
-
-.folder-header-folder .cover {
-  background: linear-gradient(135deg, #ffe563, #ffc663);
-  width: var(--folder-W);
-  height: var(--folder-H);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-}
-
-.folder-header-container h1 {
-  margin-top: calc(var(--folder-H) + 10px);
-  font-weight: bold;
-  font-size: 0.95rem;
-  color: white;
-  text-align: center;
-  z-index: 2;
-  position: relative;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
 
 /* Estilo para párrafos con íconos y colores en la seccion de ayuda */
 
@@ -621,3 +512,229 @@ body {
     margin-left: 10px;
   }
 }
+
+
+/*------------------------------ input buscador ----------*/
+
+
+.input-buscador-container {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+  color: white;
+  width: 100%;
+}
+
+.input-buscador-label {
+  font-size: 15px;
+  padding-left: 10px;
+  position: absolute;
+  top: 13px;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.input-buscador {
+  width: 100%;
+  height: 45px;
+  border: none;
+  outline: none;
+  padding: 0px 10px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  background-color: transparent;
+  background: #112223;
+  box-shadow:
+    3px 3px 10px rgba(0, 0, 0, 1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
+  padding-right: 45px; /* espacio para el ícono */
+}
+
+.input-buscador:focus {
+  border: 2px solid transparent;
+  color: #fff;
+  box-shadow:
+    3px 3px 10px rgba(0, 0, 0, 1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4),
+    inset 3px 3px 10px rgba(0, 0, 0, 1),
+    inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.input-buscador:valid ~ .input-buscador-label,
+.input-buscador:focus ~ .input-buscador-label {
+  transition: 0.3s;
+  padding-left: 2px;
+  transform: translateY(-35px);
+}
+
+
+
+/*----------------boton IA --------------*/
+
+.button-ia {
+  --black-700: hsla(0 0% 12% / 1);
+  --border_radius: 9999px;
+  --transtion: 0.3s ease-in-out;
+  --offset: 2px;
+
+  cursor: pointer;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  transform-origin: center;
+
+  padding: 1rem 2rem;
+  background-color: transparent;
+
+  border: none;
+  border-radius: var(--border_radius);
+  transform: scale(calc(1 + (var(--active, 0) * 0.1)));
+
+  transition: transform var(--transtion);
+}
+
+.button-ia::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  background-color: var(--black-700);
+
+  border-radius: var(--border_radius);
+  box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1px 2px 0 hsl(0, 0%, 0%),
+    0px 4px 10px -4px hsla(0 0% 0% / calc(1 - var(--active, 0))),
+    0 0 0 calc(var(--active, 0) * 0.375rem) hsl(260 97% 50% / 0.75);
+
+  transition: all var(--transtion);
+  z-index: 0;
+}
+
+.button-ia::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  background-color: #84a7a983; /* color reemplazado */
+  background-image: none; /* eliminamos los gradientes */
+  background-position: top;
+
+  opacity: var(--active, 0);
+  border-radius: var(--border_radius);
+  transition: opacity var(--transtion);
+  z-index: 2;
+}
+
+
+.button-ia:is(:hover, :focus-visible) {
+  --active: 1;
+}
+.button-ia:active {
+  transform: scale(1);
+}
+
+.button-ia .dots_border {
+  --size_border: calc(100% + 2px);
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--size_border);
+  height: var(--size_border);
+  background-color: transparent;
+  border-radius: var(--border_radius);
+  z-index: -10;
+}
+
+.button-ia .dots_border::before {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left;
+  transform: rotate(0deg);
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+  mask: linear-gradient(transparent 0%, white 120%);
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button-ia .sparkle {
+  position: relative;
+  z-index: 10;
+  width: 1.75rem;
+}
+
+.button-ia .sparkle .path {
+  fill: currentColor;
+  stroke: currentColor;
+  transform-origin: center;
+  color: hsl(0, 0%, 100%);
+}
+
+.button-ia:is(:hover, :focus-visible)::before {
+  box-shadow:
+    inset 0 0.5px hsl(0, 0%, 100%),
+    inset 0 -1px 2px 0 hsl(0, 0%, 0%),
+    0px 4px 10px -4px hsla(0, 0%, 0%, 0.4),
+    0 0 0 0.375rem #ffffff27;
+}
+
+
+.button-ia .sparkle .path:nth-child(1) {
+  --scale_path_1: 1.2;
+}
+.button-ia .sparkle .path:nth-child(2) {
+  --scale_path_2: 1.2;
+}
+.button-ia .sparkle .path:nth-child(3) {
+  --scale_path_3: 1.2;
+}
+
+@keyframes path {
+  0%,
+  34%,
+  71%,
+  100% {
+    transform: scale(1);
+  }
+  17% {
+    transform: scale(var(--scale_path_1, 1));
+  }
+  49% {
+    transform: scale(var(--scale_path_2, 1));
+  }
+  83% {
+    transform: scale(var(--scale_path_3, 1));
+  }
+}
+
+.button-ia .text_button {
+  position: relative;
+  z-index: 10;
+  font-size: 0.8rem;
+  color: white;
+  
+}
+

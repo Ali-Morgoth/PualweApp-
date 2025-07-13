@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import BuscadorSemantico from "../components/buscador/BucadorSemantico";
+import { BookOpenIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function Biblioteca() {
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function Biblioteca() {
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const scrollStart = useRef(0);
+  const [showModal, setShowModal] = useState(false);
 
   // Estado para controlar la opacidad del fondo
   const [bgLoaded, setBgLoaded] = useState(false);
@@ -135,21 +138,11 @@ export default function Biblioteca() {
       >
         <ArrowLeftIcon className="w-6 h-6" />
       </button>
-
-      {/* Título */}
-      <div className="folder-header-container z-20 relative">
-        <div className="folder-header-folder">
-          <div className="tip"></div>
-          <div className="cover front-side"></div>
-          <div className="cover back-side"></div>
-        </div>
-        <h1
-          className="font-extralight"
-          style={{ color: "rgba(255,255,255,0.38)" }}
-        >
-          Biblioteca Pública
-        </h1>
-      </div>
+{/* Título */}
+<div className="flex flex-col items-center justify-center gap-2">
+  <BookOpenIcon className="w-8 h-8 text-white" />
+  <h1 className="font-extralight text-white">Biblioteca Pública</h1>
+</div>
 
       {/* Carrusel horizontal */}
       <div className="mt-20 sm:mt-0 flex justify-center">
@@ -199,6 +192,38 @@ export default function Biblioteca() {
           ))}
         </div>
       </div>
+      {/* Botón flotante al final */}
+      <div className="mt-10 flex justify-center z-30 relative">
+        <button onClick={() => setShowModal(true)} className="button-ia">
+          <span className="sparkle">
+            <SparklesIcon className="path w-6 h-6" />
+          </span>
+          <span className="text_button">
+            ¿Quieres un libro sugerido por la IA?
+          </span>
+          <span className="dots_border"></span>
+        </button>
+      </div>
+      {/* Modal flotante */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1818a150] bg-opacity-60 backdrop-blur-sm">
+           
+          <div className="bg-[#84a7a983] text-white rounded-lg p-6 w-[90%] max-w-2xl max-h-[85vh] relative shadow-2xl overflow-y-auto">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-white hover:text-red-400"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+            <h2 className="text-xs font-light mb-4 text-[#14fed3]">
+              Intérprete de búsqueda por vectores y se retornan resultados por
+              similitud de significado...
+            </h2>
+            <BuscadorSemantico />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
