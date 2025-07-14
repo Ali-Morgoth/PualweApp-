@@ -738,3 +738,140 @@ body {
   
 }
 
+/*--------------------- boton circular biblioteca titulo ----*/
+
+
+.item-hints {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.item-hints .hint {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-hints .hint-dot {
+  z-index: 3;
+  border: 1px solid #ffe4e4;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  transform: scale(0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: transparent;
+}
+
+.item-hints .hint-radius {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -125px 0 0 -125px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+}
+
+.item-hints .hint-content {
+  width: 300px;
+  position: absolute;
+  top: 50%;
+  left: 100%; /* Aparece hacia la derecha */
+  transform: translateY(-50%);
+  margin-left: 20px; /* Espacio desde el ícono */
+  z-index: 5;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+  color: #fff;
+  background-color: transparent;
+  visibility: hidden;
+  pointer-events: none;
+  text-align: left;
+}
+
+.item-hints .hint:hover .hint-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.item-hints .hint-content::before {
+  width: 0px;
+  top: 50%;
+  left: -20px;
+  content: "";
+  background-color: #fff;
+  height: 1px;
+  position: absolute;
+  transition: width 0.4s;
+  transform: translateY(-50%);
+}
+
+.item-hints .hint:hover .hint-content::before {
+  width: 40px;
+} 
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.item-hints .hint-dot svg {
+  animation: blink 3s infinite;
+}
+
+
+/*pantallas pequeñas circulo y texto */
+
+@media (max-width: 768px) {
+  .item-hints {
+    flex-direction: column;
+  }
+
+  .item-hints .hint {
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .item-hints .hint-content {
+    top: calc(100% + 20px); /* más abajo del círculo */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
+    padding: 15px;
+    text-align: center;
+  }
+
+  /* Línea vertical desde el centro del círculo, detrás del texto */
+  .item-hints .hint::before {
+    content: "";
+    position: absolute;
+    /* top: 60px;  */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 1; /* detrás del texto */
+    transition: height 0.4s ease;
+  }
+
+  .item-hints .hint:hover::before {
+    height: 20px; /* hasta pasar por detrás del texto */
+  }
+}

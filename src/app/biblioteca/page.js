@@ -138,11 +138,26 @@ export default function Biblioteca() {
       >
         <ArrowLeftIcon className="w-6 h-6" />
       </button>
-{/* Título */}
-<div className="flex flex-col items-center justify-center gap-2">
-  <BookOpenIcon className="w-8 h-8 text-white" />
-  <h1 className="font-extralight text-white">Biblioteca Pública</h1>
-</div>
+      {/* Título */}
+      <div className="item-hints">
+        <div className="hint flex flex-col items-center gap-2">
+          <div className="hint-dot">
+            <BookOpenIcon className="w-8 h-8 text-white" />
+          </div>
+          <div className="bg-gray-600/30 rounded-xl px-3 py-1">
+            <p className="text-white font-extralight text-sm">
+              Biblioteca Pública
+            </p>
+          </div>
+
+          <div className="hint-content">
+            <h1 className="font-extralight text-white text-xs">
+              Aquí encontrarás un respaldo histórico de libros en formato PDF subidos por comunidades
+              indígenas mapuche huilliche.
+            </h1>
+          </div>
+        </div>
+      </div>
 
       {/* Carrusel horizontal */}
       <div className="mt-20 sm:mt-0 flex justify-center">
